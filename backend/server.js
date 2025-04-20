@@ -14,18 +14,29 @@ const port = process.env.PORT || 4000
 connectDB()
 connectCloudinary()
 
+// CORS configuration
+const corsOptions = {
+    origin: ['https://green-commerce.vercel.app', 'http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'token'],
+    credentials: true
+}
+
 // middlewares
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOptions))
+
+// Handle preflight requests
+app.options('*', cors(corsOptions))
 
 // api endpoints
-app.use('/api/user',userRouter)
-app.use('/api/product',productRouter)
-app.use('/api/cart',cartRouter)
-app.use('/api/order',orderRouter)
+app.use('/api/user', userRouter)
+app.use('/api/product', productRouter)
+app.use('/api/cart', cartRouter)
+app.use('/api/order', orderRouter)
 
-app.get('/',(req,res)=>{
+app.get('/', (req, res) => {
     res.send("API Working")
 })
 
-app.listen(port, ()=> console.log('Server started on PORT : '+ port))
+app.listen(port, () => console.log('Server started on PORT : ' + port))
